@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Electric Plan</title>
+    </head>
+    <body>
+            <div>
+                    <h1><a href="/">Regional Carbon Forecast</a></h1>
+            </div>
+                
+                {% for page in pages %}
+                    <div>
+                        <h1><a href="">{{ page.title }}</a></h1>
+                        <p>{{ page.text|linebreaksbr }}</p>
+                        <p>Current intensity: 
+                            <font color="blue">{{ page.data_now|linebreaksbr }}</font></p>
+                        <p>{{ page.fuel_name }} is generating {{ page.fuel_pc}}%</p>
+                        <p>{{ page.fcast_display }}</p>
+                    </div>
+                {% endfor %}
+    </body>
+</html>
