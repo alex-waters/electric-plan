@@ -10,12 +10,24 @@
                 {% for page in pages %}
                     <div>
                         <h1><a href="">{{ page.title }}</a></h1>
-                        <p>{{ page.text|linebreaksbr }}</p>
-                        <p>Current intensity: 
-                            <font color="blue">{{ page.data_now|linebreaksbr }}</font></p>
-                        <p>{{ page.fuel_name }} is generating {{ page.fuel_pc}}%</p>
-                        <p>{{ page.fcast_display }}</p>
+                        <h2>{{ page.text|linebreaksbr }}</h2>
                     </div>
                 {% endfor %}
+
+
+            <div>
+                Current API time is : {{ time }} UTC
+                <p>Current intensity:
+
+                    <font color="blue">{{ intensity|linebreaksbr }}</font></p>
+                <p>{{ fuel }} is generating {{ fuel_pc }}% </p>
+            </div>
+                <b>Time &emsp; Int. &ensp; % </b>
+                {% for line in fcast %}
+                    <div>
+                        {{ line }}
+                    </div>
+                {% endfor %}
+
     </body>
 </html>
