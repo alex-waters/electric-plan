@@ -6,7 +6,7 @@ from carbondata.api_call import GridData
 
 def page_list(request):
     pages = CarbonData.objects.filter()
-    data_refresh = GridData(15)
+    data_refresh = GridData(intervals=40)
     now = data_refresh.now()
     fcast_display = data_refresh.future()
 
