@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 import requests
 
+from plotly.offline import init_notebook_mode, plot, iplot
+import plotly.graph_objs as go
+
 now_response = requests.get(
     'https://api.carbonintensity.org.uk/regional/regionid/3'
 )
@@ -26,6 +29,22 @@ for interval in range(0,20):
     wind_pc = fcast_data['data']['data'][interval]['generationmix'][-1]['perc']
 
     fcast_display.append(time[11:] + ' : ' + str(intensity) + ' ,  ' + str(wind_pc))
+
+
+points = []
+for interval in range(0,20):
+    intensity = fcast_data['data']['data'][interval]['intensity']['forecast']
+    points.append(intensity)
+
+trace = go.Scatter(
+    #x = random_x,
+    y = points,
+    mode = 'markers',
+    name = 'markers'
+)
+data = [trace]
+
+plot(data, filename='C:\\Users\\wateal\\Desktop\\electric-plan\\electricplan\\templates\\electricplan\\carbonchart.html')
 
 
 class CarbonData(models.Model):
