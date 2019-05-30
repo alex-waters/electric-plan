@@ -30,21 +30,65 @@ for interval in range(0,20):
 
     fcast_display.append(time[11:] + ' : ' + str(intensity) + ' ,  ' + str(wind_pc))
 
-
-points = []
+times = []
+intensities = []
+wind = []
+nuclear = []
+gas = []
 for interval in range(0,20):
-    intensity = fcast_data['data']['data'][interval]['intensity']['forecast']
-    points.append(intensity)
+    times.append(fcast_data['data']['data'][interval]['from'])
+    intensities.append(fcast_data['data']['data'][interval]['intensity']['forecast'])
+    wind.append(fcast_data['data']['data'][interval]['generationmix'][-1]['perc'])
+    nuclear.append(fcast_data['data']['data'][interval]['generationmix'][4]['perc'])
+    gas.append(fcast_data['data']['data'][interval]['generationmix'][3]['perc'])
+    
 
-trace = go.Scatter(
-    #x = random_x,
-    y = points,
-    mode = 'markers',
-    name = 'markers'
+ints_dots = go.Scatter(
+    x=times,
+    y=intensities,
+    name='Intensity',
+    yaxis='y2'
 )
-data = [trace]
+gas_bar = go.Bar(
+    x=times,
+    y=gas,
+    #width=widths,
+    name='Gas',
+    marker={'color': '#9db6f4'}
+)
+wind_bar = go.Bar(
+    x=times,
+    y=wind,
+    #width=widths,
+    name='Wind',
+    marker={'color': '#a5ea89'}
+)
+nuclear_bar = go.Bar(
+    x=times,
+    y=nuclear,
+    #width=widths,
+    name='Nuclear',
+    marker={'color': '#ffcb6b'}
+)
 
-plot(data, filename='C:\\Users\\wateal\\Desktop\\electric-plan\\electricplan\\templates\\electricplan\\carbonchart.html')
+data_to_plot = [wind_bar, nuclear_bar, gas_bar, ints_dots]
+layout = go.Layout(
+    title='''
+        <b>Carbon Intensity and Energy Sources </b> <br>
+        NW England <br>
+        (Times are UTC)
+    ''',
+    barmode='stack',
+    yaxis2={
+        'overlaying': 'y', 
+        'side': 'right', 
+        'range': [0, max(intensities)+10],
+        'showgrid': False
+    }
+)
+
+fig = go.Figure(data=data_to_plot, layout=layout)
+plot(fig, filename='C:\\Users\\wateal\\Desktop\\electric-plan\\electricplan\\templates\\electricplan\\carbonchart.html')
 
 
 class CarbonData(models.Model):
