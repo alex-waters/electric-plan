@@ -132,6 +132,6 @@ class CarbonData(models.Model):
         chart = self.gen_chart()
         plot(
             chart,
-            filename='electricplan/templates/electricplan/carbonchart.html',
+            filename='/home/anw/anw.pythonanywhere.com/electricplan/templates/electricplan/carbonchart.html',
             auto_open=False
         )
