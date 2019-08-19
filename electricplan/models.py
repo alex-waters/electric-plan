@@ -20,7 +20,7 @@ fcast_response  = requests.get('''
 fcast_data = fcast_response.json()
 
 fcast_display = []
-for interval in range(0,20):
+for interval in range(0,60):
     time = fcast_data['data']['data'][interval]['from']
     intensity = fcast_data['data']['data'][interval]['intensity']['forecast']
     wind_pc = fcast_data['data']['data'][interval]['generationmix'][-1]['perc']
