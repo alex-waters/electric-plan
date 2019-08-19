@@ -48,7 +48,7 @@ class CarbonData(models.Model):
         gas = []
         solar = []
         # quite risky positional references here, TO DO : make it safer
-        for interval in range(0, 20):
+        for interval in range(0, 60):
             times.append(fcast_data['data']['data'][interval]['from'])
             intensities.append(fcast_data['data']['data'][interval]['intensity']['forecast'])
             wind.append(fcast_data['data']['data'][interval]['generationmix'][-1]['perc'])
