@@ -36,7 +36,7 @@ class CarbonData(models.Model):
         utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
 
         fcast_response = requests.get('''
-            https://api.carbonintensity.org.uk/regional/intensity/{}/fw24h/regionid/3
+            https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/3
             '''.format(utc_time)
                                       )
         fcast_data = fcast_response.json()
