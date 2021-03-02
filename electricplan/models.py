@@ -9,6 +9,7 @@ from django.db import models
 # These lines get the current live data. this is useful for checking forecast accuracy.
 # TO DO : add in an accuracy check and display result to the frontend
 
+
 # now_response = requests.get(
 #     'https://api.carbonintensity.org.uk/regional/regionid/3'
 # )
@@ -31,6 +32,7 @@ class CarbonData(models.Model):
 
     def __str__(self):
         return self.title
+
 
     def get_data(self):
         utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
