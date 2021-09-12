@@ -1,4 +1,0 @@
-Django~=2.1
-Plotly
-datetime
-requests
