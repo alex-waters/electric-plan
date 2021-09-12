@@ -1,15 +1,13 @@
 import requests
-import pickle
 from datetime import datetime
 import plotly.graph_objs as go
-from plotly.offline import plot
 
 utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
-
-fcast_response = requests.get('''
-    https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/3
+api_url = '''
+        https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/3
     '''.format(utc_time)
-                                )
+
+fcast_response = requests.get(api_url)
 fcast_data = fcast_response.json()
 
 extracted = {
