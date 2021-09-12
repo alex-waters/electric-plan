@@ -7,7 +7,7 @@ api_url = '''
         https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/3
     '''.format(utc_time)
 
-fcast_response = requests.get(api_url)
+fcast_response = requests.get(str(api_url))
 fcast_data = fcast_response.json()
 
 extracted = {
