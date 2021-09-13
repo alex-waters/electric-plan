@@ -147,4 +147,4 @@ fig.update_layout(
     yaxis_showgrid=False, 
     hovermode='x unified'
 )
-fig.write_html('templates/carbon_plot.html')
+fig.write_html('carbon_plot.html')
