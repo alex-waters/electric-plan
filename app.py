@@ -4,9 +4,6 @@ from flask import Flask, render_template, send_from_directory, request
 
 app = Flask(__name__)
 
-# del the old carbon plot explicitly
-os.remove('templates/carbon_plot.html')
-
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
