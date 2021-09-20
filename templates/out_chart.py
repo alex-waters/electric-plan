@@ -4,8 +4,10 @@ from datetime import datetime
 import plotly.graph_objs as go
 
 # del the old carbon plot explicitly
-os.remove('templates/carbon_plot.html')
-
+try:
+    os.remove('carbon_plot.html')
+except FileNotFoundError:
+    pass
 utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
 api_url = '''
         https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/3
@@ -151,4 +153,4 @@ fig.update_layout(
     yaxis_showgrid=False, 
     hovermode='x unified'
 )
-fig.write_html('/home/anw/mysite/electric-plan/templates/carbon_plot.html')
+fig.write_html('carbon_plot.html')
