@@ -1,6 +1,10 @@
 import requests
+import os
 from datetime import datetime
 import plotly.graph_objs as go
+
+# del the old carbon plot explicitly
+os.remove('templates/carbon_plot.html')
 
 utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
 api_url = '''
