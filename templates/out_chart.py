@@ -153,4 +153,8 @@ fig.update_layout(
     yaxis_showgrid=False, 
     hovermode='x unified'
 )
-fig.write_html('/home/anw/mysite/electric-plan/templates/carbon_plot.html')
+try:
+    fig.write_html('/home/anw/mysite/electric-plan/templates/carbon_plot.html')
+except FileNotFoundError:
+    fig.write_html('carbon_plot.html')
+    
