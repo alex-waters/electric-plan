@@ -5,7 +5,7 @@ import plotly.graph_objs as go
 
 # del the old carbon plot explicitly
 try:
-    os.remove('/home/anw/mysite/electric-plan/templates/carbon_plot.html')
+    os.remove('/home/anw/mysite/electric-plan/templates/carbon_plot_5.html')
 except FileNotFoundError:
     pass
 utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
