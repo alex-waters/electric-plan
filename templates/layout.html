@@ -4,9 +4,13 @@
     <meta charset="utf-8"/>
     
     <style>
+      * {
+        font-family: sans-serif;
+      }
       h4 {
         background-color: rgb(174, 174, 239);
       }
+      
       </style>
   </head>
   <body>
@@ -18,7 +22,7 @@
     Electricity sources vary around the country so to plan your use correctly, you need to set your National Grid region below. <br>
     If you are unsure of your region, you can try using this page to help : <a href="https://en.wikipedia.org/wiki/Distribution_network_operator">Energy Networks Map</a>
     <br>
-    Select your region: <br>
+    <H5>Select your region: </H5><br>
 
     <form action="" method="post" name="region_choose">
       <select name="menu" id="region">
@@ -39,7 +43,7 @@
       <input type="submit">
     </form>
     <br>
-    <embed type="text/html" src="carbon_plot_4.html">
+    <embed type="text/html" src="{{url_for('static', filename='carbon_plot_4.html')}}" width="100%" height="500">
 
     <footer class="footer">
       <small>Made by <a href="https://www.linkedin.com/in/alex-waters-01449534/">Alex</a></small>

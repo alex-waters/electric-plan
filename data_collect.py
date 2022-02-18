@@ -169,5 +169,5 @@ class NewPlot:
                 '/home/anw/mysite/electric-plan/templates/'+plot_filename
             )
         except FileNotFoundError:
-            fig.write_html(plot_filename)
+            fig.write_html('templates/'+plot_filename)
         

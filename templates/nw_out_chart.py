@@ -154,7 +154,7 @@ fig.update_layout(
     hovermode='x unified'
 )
 try:
-    fig.write_html('/home/anw/mysite/electric-plan/templates/carbon_plot_4.html')
+    fig.write_html('/home/anw/mysite/electric-plan/static/carbon_plot_4.html')
 except FileNotFoundError:
-    fig.write_html('templates/carbon_plot_4.html')
+    fig.write_html('static/carbon_plot_4.html')
     

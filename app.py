@@ -1,4 +1,6 @@
 import os
+import time
+import data_collect
 from flask import Flask, render_template, send_from_directory, request
 
 
@@ -12,9 +14,24 @@ def favicon():
 
 
 @app.route('/', methods=['GET', 'POST'])
-def asset_refine():
+def region_choice():
 
-    page = render_template('carbon_plot.html')
+    if request.method == 'GET':
+
+        page = render_template('layout.html')
+        print('just get')
+    elif request.method == 'POST':
+        chosen_region = int(request.form.getlist("menu")[0])
+        print(chosen_region)
+        if chosen_region == 5:
+            page = render_template('carbon_plot_5.html')
+        elif chosen_region in (*range(1, 3), *range(4, 15)):
+            render_template('wait.html')
+            data_collect.NewPlot(chosen_region)
+            time.sleep(7)
+            page = render_template(
+                'carbon_plot_{}.html'.format(chosen_region))
+
     return page
 
 
