@@ -131,7 +131,7 @@ data_to_plot = [
 layout = go.Layout(
     # strange string formatting is needed to get the plotly title right
     title='''
-            <b> Sources of electricity and carbon intensity </b> <br> NW England <br> (Times are UTC)
+            <b> Sources of electricity and carbon intensity </b> <br> Yorkshire <br> (Times are UTC)
     ''',
     yaxis={
         'title': 'Electricity from this source (%)',
