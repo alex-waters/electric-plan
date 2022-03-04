@@ -26,7 +26,7 @@ extracted = {
     'biomass': [],
     'coal': [],
     'hydro': [],
-    'imported': []
+    'imports': []
 }
 
 for interval in fcast_data['data']['data']:
@@ -115,11 +115,11 @@ coal_bar = dict(
 )
 imported_bar = dict(
     x=extracted['times'],
-    y=extracted['imported'],
+    y=extracted['imports'],
     name='Imported',
     mode='lines',
     line={'width': 0},
-    marker={'color': '#848484'},
+    marker={'color': '#c1c1c1'},
     stackgroup='one'
 )
 
