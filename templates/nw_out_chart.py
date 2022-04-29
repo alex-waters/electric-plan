@@ -1,5 +1,6 @@
 import requests
 import os
+import pytz
 from datetime import datetime
 import plotly.graph_objs as go
 
@@ -32,7 +33,10 @@ extracted = {
 for interval in fcast_data['data']['data']:
 
     extracted['times'].append(
-        interval['from'])
+        pytz.timezone('utc').localize(
+        datetime.strptime(interval['from'], '%Y-%m-%dT%H:%MZ')
+            ).astimezone(pytz.timezone('Europe/London'))
+    )
     extracted['intensities'].append(
         interval['intensity']['forecast'])
     for mix in interval['generationmix']:

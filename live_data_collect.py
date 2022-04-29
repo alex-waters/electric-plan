@@ -1,3 +1,7 @@
+'''
+This class is only used when the user chooses another region that hasn't been prepared in the templates/ dir by chron
+'''
+
 import requests
 import os
 from datetime import datetime
