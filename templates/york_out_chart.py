@@ -1,5 +1,6 @@
 import requests
 import os
+import pytz
 from datetime import datetime
 import plotly.graph_objs as go
 
@@ -32,7 +33,10 @@ extracted = {
 for interval in fcast_data['data']['data']:
 
     extracted['times'].append(
-        interval['from'])
+        pytz.timezone('utc').localize(
+        datetime.strptime(interval['from'], '%Y-%m-%dT%H:%MZ')
+            ).astimezone(pytz.timezone('Europe/London'))
+    )
     extracted['intensities'].append(
         interval['intensity']['forecast'])
     for mix in interval['generationmix']:
@@ -131,7 +135,7 @@ data_to_plot = [
 layout = go.Layout(
     # strange string formatting is needed to get the plotly title right
     title='''
-            <b> Sources of electricity and carbon intensity </b> <br> Yorkshire <br> (Times are UTC)
+            <b> Sources of electricity and carbon intensity </b> <br> Yorkshire <br>
     ''',
     yaxis={
         'title': 'Electricity from this source (%)',

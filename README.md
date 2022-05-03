@@ -9,3 +9,5 @@ The other dirs are mostly artefacts of history
 
 # justchart
 this branch holds the original Django app and renders a similar plotly chart
+
+TO DO : Change template files to instantiate class from live_data_collect rather than copy it

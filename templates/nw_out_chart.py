@@ -9,6 +9,7 @@ try:
     os.remove('/home/anw/mysite/electric-plan/templates/carbon_plot_4.html')
 except FileNotFoundError:
     pass
+
 utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
 api_url = '''
         https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/3
@@ -135,7 +136,7 @@ data_to_plot = [
 layout = go.Layout(
     # strange string formatting is needed to get the plotly title right
     title='''
-            <b> Sources of electricity and carbon intensity </b> <br> NW England <br> (Times are UTC)
+            <b> Sources of electricity and carbon intensity </b> <br> NW England <br>
     ''',
     yaxis={
         'title': 'Electricity from this source (%)',

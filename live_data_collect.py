@@ -4,6 +4,7 @@ This class is only used when the user chooses another region that hasn't been pr
 
 import requests
 import os
+import pytz
 from datetime import datetime
 import plotly.graph_objs as go
 
@@ -46,7 +47,10 @@ class NewPlot:
         for interval in fcast_data['data']['data']:
 
             extracted['times'].append(
-                interval['from'])
+                pytz.timezone('utc').localize(
+                datetime.strptime(interval['from'], '%Y-%m-%dT%H:%MZ')
+                    ).astimezone(pytz.timezone('Europe/London'))
+            )
             extracted['intensities'].append(
                 interval['intensity']['forecast'])
             for mix in interval['generationmix']:
@@ -145,7 +149,7 @@ class NewPlot:
         layout = go.Layout(
             # strange string formatting is needed to get the plotly title right
             title='''
-                    <b> Sources of electricity and carbon intensity </b> <br> {} <br> (Times are UTC)
+                    <b> Sources of electricity and carbon intensity </b> <br> {} <br>
             '''.format(fcast_data['data']['shortname']),
             yaxis={
                 'title': 'Electricity from this source (%)',

@@ -1,6 +1,6 @@
 import os
 import time
-import data_collect
+import live_data_collect
 from flask import Flask, render_template, send_from_directory, request
 
 
