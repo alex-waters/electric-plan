@@ -27,7 +27,7 @@ def region_choice():
             page = render_template('carbon_plot_5.html')
         elif chosen_region in (*range(1, 3), *range(4, 15)):
             render_template('wait.html')
-            data_collect.NewPlot(chosen_region).gen_plot()
+            live_data_collect.NewPlot(chosen_region).gen_plot()
             time.sleep(7)
             page = render_template(
                 'carbon_plot_{}.html'.format(chosen_region))
