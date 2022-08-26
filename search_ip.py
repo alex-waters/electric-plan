@@ -2,6 +2,7 @@ import re
 import requests
 import datetime
 
+#pull a list of ip addresses from log file
 found_ips = []
 with open('/var/log/anw.pythonanywhere.com.access.log') as access_log:
     for event in access_log:
@@ -15,6 +16,7 @@ with open('/var/log/anw.pythonanywhere.com.access.log') as access_log:
 
 search_ips = set(found_ips)
 
+# get ip info from service and write to local file
 accessor = []
 for i in search_ips:
     ip_lookup = requests.get(f'https://ip.rootnet.in/lookup/{i}').json()
