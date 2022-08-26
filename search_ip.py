@@ -21,10 +21,10 @@ accessor = []
 for i in search_ips:
     ip_lookup = requests.get(f'https://ip.rootnet.in/lookup/{i}').json()
     accessor.append(ip_lookup['ip'] + ' ' + ip_lookup['as']['name'])
-with open('ips.txt', 'w') as clear_ips:
+with open('static/ips.txt', 'w') as clear_ips:
     clear_ips.write('IPs: \n')
     clear_ips.close()
-with open('ips.txt', 'a') as ip_out:
+with open('static/ips.txt', 'a') as ip_out:
     for i in accessor:
         ip_out.write(i + '\n')
         
