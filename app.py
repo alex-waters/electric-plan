@@ -37,7 +37,7 @@ def region_choice():
 
 @app.route('/ips', methods=['GET', 'POST'])
 def serve_file():
-    with open('static/ips.txt', 'r') as f:
+    with open('/home/anw/mysite/electric-plan/static/ips.txt', 'r') as f:
         content = f.read()
     return Response(content, mimetype='text/plain')
 
