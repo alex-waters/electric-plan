@@ -1,7 +1,7 @@
 import os
 import time
 import live_data_collect
-from flask import Flask, render_template, send_from_directory, request
+from flask import Flask, render_template, send_from_directory, request, Response
 
 
 app = Flask(__name__)
@@ -34,6 +34,12 @@ def region_choice():
 
     return page
 
+
+@app.route('/ips', methods=['GET', 'POST'])
+def serve_file():
+    with open('/home/anw/mysite/electric-plan/static/ips.txt', 'r') as f:
+        content = f.read()
+    return Response(content, mimetype='text/plain')
 
 if __name__ == '__main__':
     port = app.config.get("PORT", 5000)
