@@ -8,11 +8,11 @@ with open('/var/log/anw.pythonanywhere.com.access.log') as access_log:
     for event in access_log:
         event_date_str = re.findall('[0-9]{2}/[A-Z][a-z]{2}/[0-9]{4}', event)
         event_date = datetime.datetime.strptime(event_date_str[0], '%d/%b/%Y')
-        if event_date.date() == datetime.date.today() - datetime.timedelta(days=1):
+        if datetime.date.today() - event_date.date() < datetime.timedelta(8):
             found_ips.append(re.findall("[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}",
                 event
                 )[0])
-    access_log.close()         
+    access_log.close()
 
 search_ips = set(found_ips)
 
