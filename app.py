@@ -41,6 +41,15 @@ def serve_file():
         content = f.read()
     return Response(content, mimetype='text/plain')
 
+
+@app.route('/steps', methods=['GET'])
+def watch_vis():
+
+    page = render_template('layout_watch.html')
+
+    return page
+
+
 if __name__ == '__main__':
     port = app.config.get("PORT", 5000)
     app.run(port=port)
