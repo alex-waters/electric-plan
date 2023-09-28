@@ -28,7 +28,7 @@ measure_call = requests.post(
 
 measure_json = json.dumps(measure_call.json())
 if measure_call.json()['status'] == 0:
-    measure_file = open('~/mysite/electric-plan/DATA/measure_data.txt', 'w')
+    measure_file = open('/home/anw/mysite/electric-plan/DATA/measure_data.txt', 'w')
     measure_file.write(measure_json)
     measure_file.close()
 else:
@@ -47,7 +47,7 @@ sleep_call = requests.post(
 )
 
 sleep_json = json.dumps(sleep_call.json())
-sleep_file = open('~/mysite/electric-plan/DATA/sleep_data.txt', 'w')
+sleep_file = open('/home/anw/mysite/electric-plan/DATA/sleep_data.txt', 'w')
 sleep_file.write(sleep_json)
 sleep_file.close()
 
@@ -63,6 +63,6 @@ sleep_sumy_call = requests.post(
 )
 
 sleep_sumy_json = json.dumps(sleep_sumy_call.json())
-sleep_sumy_file = open('~/mysite/electric-plan/DATA/sleep_sumy_data.txt', 'w')
+sleep_sumy_file = open('/home/anw/mysite/electric-plan/DATA/sleep_sumy_data.txt', 'w')
 sleep_sumy_file.write(sleep_sumy_json)
 sleep_sumy_file.close()

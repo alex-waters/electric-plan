@@ -5,7 +5,7 @@ from datetime import datetime
 from collections import OrderedDict
 
 # Read in the sourcedata
-measures_file = open('~/mysite/electric-plan/DATA/measure_data.txt')
+measures_file = open('/home/anw/mysite/electric-plan/DATA/measure_data.txt')
 measures = json.load(measures_file)
 
 activity_dates = []
@@ -63,7 +63,7 @@ steps_plot.update_xaxes(
     dtick="D1",
     tickformat="%A<br>%d %b"
 )
-steps_plot.write_html('~/mysite/electric-plan/static/daily_steps.html')
+steps_plot.write_html('/home/anw/mysite/electric-plan/static/daily_steps.html')
 
 # long term steps
 lt_steps_plot = go.Figure(data=[
@@ -80,4 +80,4 @@ lt_steps_plot.update_traces(
 lt_steps_plot.update_layout(
     plot_bgcolor='#ffffff',
 )
-lt_steps_plot.write_html('~/mysite/electric-plan/static/long_term_steps.html')
+lt_steps_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_steps.html')
