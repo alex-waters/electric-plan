@@ -2,7 +2,7 @@ import requests
 import json
 from datetime import datetime, timedelta
 
-with open('token_file.txt') as tf:
+with open('/home/anw/mysite/electric-plan/watch_vis_app/token_file.txt') as tf:
     token_json = json.load(tf)
 
 access_token = token_json['body']['access_token']
