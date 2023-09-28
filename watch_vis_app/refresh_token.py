@@ -1,7 +1,7 @@
 import requests
 import json
 
-with open('token_file.txt') as tf:
+with open('/home/anw/mysite/electric-plan/watch_vis_app/token_file.txt') as tf:
     token_json = json.load(tf)
 
 refresh_token = token_json['body']['refresh_token']
@@ -18,6 +18,6 @@ refresh = requests.post(
 )
 
 refresh_json = json.dumps(refresh.json())
-token_file = open('token_file.txt', 'w')
+token_file = open('/home/anw/mysite/electric-plan/watch_vis_app/token_file.txt', 'w')
 token_file.write(refresh_json)
 token_file.close()
