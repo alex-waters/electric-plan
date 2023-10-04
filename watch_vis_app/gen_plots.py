@@ -61,7 +61,11 @@ steps_plot.update_layout(
 )
 steps_plot.update_xaxes(
     dtick="D1",
-    tickformat="%A<br>%d %b"
+    tickformat="%A<br>%d %b",
+    fixedrange = True
+)
+steps_plot.update_yaxes(
+    fixedrange =True
 )
 steps_plot.write_html('/home/anw/mysite/electric-plan/static/daily_steps.html')
 
@@ -79,5 +83,11 @@ lt_steps_plot.update_traces(
 )
 lt_steps_plot.update_layout(
     plot_bgcolor='#ffffff',
+)
+ls_steps_plot.update_xaxes(
+    fixedrange = True
+)
+lt_steps_plot.update_yaxes(
+    fixedrange =True
 )
 lt_steps_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_steps.html')
