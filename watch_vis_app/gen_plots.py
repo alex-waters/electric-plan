@@ -66,7 +66,7 @@ steps_plot.update_xaxes(
 )
 steps_plot.update_yaxes(
     fixedrange=True,
-    autorange='max'
+    range=[0, max(cleaned_steps[-8:])*1.2]
 )
 steps_plot.write_html('/home/anw/mysite/electric-plan/static/daily_steps.html')
 
