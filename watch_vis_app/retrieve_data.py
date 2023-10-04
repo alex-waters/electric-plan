@@ -9,7 +9,7 @@ access_token = token_json['body']['access_token']
 
 # Activity measures
 first_date = datetime.strftime(
-    datetime.today() - timedelta(days=150),
+    datetime.today() - timedelta(days=180),
     format='%Y-%m-%d'
 )
 todays_date = datetime.strftime(
