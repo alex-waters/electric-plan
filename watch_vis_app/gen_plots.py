@@ -84,7 +84,7 @@ lt_steps_plot.update_traces(
 lt_steps_plot.update_layout(
     plot_bgcolor='#ffffff',
 )
-ls_steps_plot.update_xaxes(
+lt_steps_plot.update_xaxes(
     fixedrange = True
 )
 lt_steps_plot.update_yaxes(
