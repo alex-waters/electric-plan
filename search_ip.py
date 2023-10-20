@@ -23,7 +23,7 @@ search_ips = set([x[0] for x in found_ips])
 # get ip info from service and write to local file
 accessor = []
 for i in search_ips:
-    ip_lookup = requests.get(f'https://ip.rootnet.in/lookup/{i[0]}').json()
+    ip_lookup = requests.get(f'https://ip.rootnet.in/lookup/{i}').json()
     accessor.append(ip_lookup['ip'] + ' ' + ip_lookup['as']['name'])
 with open('/home/anw/mysite/electric-plan/static/ips.txt', 'w') as clear_ips:
     clear_ips.write('IPs: \n')
