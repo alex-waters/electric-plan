@@ -33,4 +33,4 @@ with open('/home/anw/mysite/electric-plan/static/ips.txt', 'a') as ip_out:
         ip_out.write(i + '\n')
     ip_out.write('\n All traffic: \n')
     for i in found_ips:
-        ip_out.write(i + '\n')        
+        ip_out.write(str(i[0]) + '    ' + str(i[1]) + '\n')        
