@@ -18,7 +18,7 @@ with open('/var/log/anw.pythonanywhere.com.access.log') as access_log:
                 )
     access_log.close()
 
-search_ips = set(found_ips)
+search_ips = set([x[0] for x in search_ips])
 
 # get ip info from service and write to local file
 accessor = []
