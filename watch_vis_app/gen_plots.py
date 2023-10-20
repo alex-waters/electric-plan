@@ -39,12 +39,13 @@ for s in steps:
 # Generate plots
 
 # recent steps
+days_to_vis = 8 + datetime.today().weekday()
 steps_plot = go.Figure(data=[
     go.Bar(
         name='Steps', 
-        x=activity_dates[-8:], 
-        y=cleaned_steps[-8:], 
-        text=cleaned_steps[-8:]
+        x=activity_dates[-days_to_vis:], 
+        y=cleaned_steps[-days_to_vis:], 
+        text=cleaned_steps[-days_to_vis:]
     )
 ])
 steps_plot.update_traces(
@@ -57,7 +58,8 @@ steps_plot.update_traces(
     textfont_size=18
 )
 steps_plot.update_layout(
-    plot_bgcolor='#ffffff'
+    plot_bgcolor='#ffffff',
+    hovermode='x unified'
 )
 steps_plot.update_xaxes(
     dtick="D1",
@@ -66,7 +68,7 @@ steps_plot.update_xaxes(
 )
 steps_plot.update_yaxes(
     fixedrange=True,
-    range=[0, max(cleaned_steps[-8:])*1.2]
+    range=[0, max(cleaned_steps[-days_to_vis:])*1.2]
 )
 steps_plot.write_html('/home/anw/mysite/electric-plan/static/daily_steps.html')
 
@@ -84,6 +86,7 @@ lt_steps_plot.update_traces(
 )
 lt_steps_plot.update_layout(
     plot_bgcolor='#ffffff',
+    hovermode='x unified'
 )
 lt_steps_plot.update_xaxes(
     fixedrange=True
