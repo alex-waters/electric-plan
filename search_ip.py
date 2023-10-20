@@ -18,7 +18,7 @@ with open('/var/log/anw.pythonanywhere.com.access.log') as access_log:
                 )
     access_log.close()
 
-search_ips = set([x[0] for x in search_ips])
+search_ips = set([x[0] for x in found_ips])
 
 # get ip info from service and write to local file
 accessor = []
@@ -32,5 +32,5 @@ with open('/home/anw/mysite/electric-plan/static/ips.txt', 'a') as ip_out:
     for i in accessor:
         ip_out.write(i + '\n')
     ip_out.write('\n All traffic: \n')
-    for i in search_ips:
+    for i in found_ips:
         ip_out.write(i + '\n')        
