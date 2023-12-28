@@ -13,19 +13,21 @@ activity_dates = []
 steps = []
 active_prop = []
 intense_prop = []
+activity = []
 for d in measures['body']['activities']:
     activity_dates.append(d['date'])
     steps.append(d['steps'])
+    activity.append(d['active']) if int(d['active']) > 0 else activity.append(0)
     try:
         active_prop.append(d['active']/(d['soft'] + d['moderate'] + d['intense']))
         intense_prop.append(d['intense']/(d['soft'] + d['moderate'] + d['intense']))
     except ZeroDivisionError:
-        pass
+        active_prop.append(0)
+        intense_prop.append(0)
 inactive_prop = [1-(x+y) for x,y in [x for x in zip(active_prop, intense_prop)]]
 
 # round the figures to improve plotly visuals
 active_prop = [round(x*100) for x in active_prop]
-intense_prop = [round(x*100) for x in intense_prop]
 inactive_prop = [round(x*100) for x in inactive_prop]
 
 # synthesise some more accurate figures
