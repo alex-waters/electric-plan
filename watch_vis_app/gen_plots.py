@@ -1,8 +1,9 @@
 import json
-import plotly.graph_objects as go
+import numpy
 import random
+import plotly.graph_objects as go
 from datetime import datetime
-from collections import OrderedDict
+from sklearn.linear_model import LinearRegression
 
 # Read in the sourcedata
 measures_file = open('/home/anw/mysite/electric-plan/DATA/measure_data.txt')
