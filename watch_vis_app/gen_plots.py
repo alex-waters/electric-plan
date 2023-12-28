@@ -95,3 +95,79 @@ lt_steps_plot.update_yaxes(
     fixedrange=True
 )
 lt_steps_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_steps.html')
+
+# recent proportion of day being active
+prop_act_plot = go.Figure(data=[
+    go.Bar(
+        name='Level of Activity', 
+        x=activity_dates[-days_to_vis:], 
+        y=active_prop[-days_to_vis:]
+    )
+])
+prop_act_plot.update_traces(
+    marker_color='#6D9476'
+)
+prop_act_plot.update_layout(
+    plot_bgcolor='#ffffff',
+    hovermode = 'x unified'
+)
+prop_act_plot.update_xaxes(
+    fixedrange=True
+)
+prop_act_plot.update_yaxes(
+    fixedrange=True
+)
+prop_act_plot.write_html('/home/anw/mysite/electric-plan/static/prop_act.html')
+
+# long term absolute activity levels
+time_passage = [(activity_dates.index(x)-len(activity_dates))*-1 for x in activity_dates]
+straight = LinearRegression().fit(
+    numpy.array(time_passage).reshape(-1, 1),
+    activity
+)
+straight_predicts = straight.predict(numpy.array(time_passage).reshape(-1, 1))
+
+def SMA(data,lag=10):
+    sma = []
+    for i in range(lag):
+        sma.append(numpy.nan)
+    for i in range(lag,len(data)):
+        sma.append(numpy.mean(data[i-lag:i]))
+    return numpy.array(sma)
+
+
+mv_avg_activity = SMA(activity)
+
+lt_act_plot = go.Figure(data=[
+    go.Scatter(
+        name='Long Term Activity', 
+        x=activity_dates, 
+        y=activity, 
+        marker_color='#6D9476'
+    )
+])
+lt_act_plot.add_trace(go.Scatter(
+    name='Trend',
+    x=activity_dates,
+    y=straight_predicts,
+    mode='lines',
+    marker_color='#415846'
+))
+lt_act_plot.add_trace(go.Scatter(
+    name='Poly Trend',
+    x=activity_dates,
+    y=mv_avg_activity,
+    mode='lines',
+    marker_color='#202c23'
+))
+lt_act_plot.update_layout(
+    plot_bgcolor='#ffffff',
+    hovermode = 'x unified'
+)
+lt_act_plot.update_xaxes(
+    fixedrange=True
+)
+lt_act_plot.update_yaxes(
+    fixedrange=True
+)
+lt_act_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_activity.html')
