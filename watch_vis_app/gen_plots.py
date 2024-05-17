@@ -173,11 +173,7 @@ lt_act_plot.update_layout(
     plot_bgcolor='#ffffff',
     hovermode='x unified'
 )
-lt_act_plot.update_xaxes(
-    fixedrange=True
-)
 lt_act_plot.update_yaxes(
-    fixedrange=True,
     autorangeoptions={'maxallowed':15000}
 )
 lt_act_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_activity.html')
