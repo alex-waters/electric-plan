@@ -42,7 +42,7 @@ for s in steps:
 # Generate plots
 
 # recent steps
-days_to_vis = 8 + datetime.today().weekday()
+days_to_vis = 15 + datetime.today().weekday()
 steps_plot = go.Figure(data=[
     go.Bar(
         name='Steps', 
@@ -123,10 +123,14 @@ prop_act_plot.update_yaxes(
 prop_act_plot.write_html('/home/anw/mysite/electric-plan/static/prop_act.html')
 
 # long term absolute activity levels
+
+# remove outliers from activity so overall trend easier to see
+smooth_act = [x if x in range(0, 12001) else 3000 for x in activity]
+
 time_passage = [(activity_dates.index(x)-len(activity_dates))*-1 for x in activity_dates]
 straight = LinearRegression().fit(
     numpy.array(time_passage).reshape(-1, 1),
-    activity
+    smooth_act
 )
 straight_predicts = straight.predict(numpy.array(time_passage).reshape(-1, 1))
 
@@ -141,13 +145,13 @@ def sma(data, lag=10):
     return numpy.array(av_values)
 
 
-mv_avg_activity = sma(activity)
+mv_avg_activity = sma(smooth_act)
 
 lt_act_plot = go.Figure(data=[
     go.Scatter(
         name='Long Term Activity', 
         x=activity_dates, 
-        y=activity, 
+        y=activity,
         marker_color='#6D9476'
     )
 ])
@@ -173,6 +177,7 @@ lt_act_plot.update_xaxes(
     fixedrange=True
 )
 lt_act_plot.update_yaxes(
-    fixedrange=True
+    fixedrange=True,
+    autorangeoptions_maxallowed=15000
 )
 lt_act_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_activity.html')

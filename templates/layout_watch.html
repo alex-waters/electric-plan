@@ -8,18 +8,24 @@
         font-family: sans-serif;
       }
       h3 {
+        font-size: 1.5em;
         background-color: #946E8B;
+        color: white
+      }
+      h4 {
+        font-size: 1.5em;
+        background-color: #6D9476;
+        color: white;
+        margin-top: 1em;
+        margin-bottom: 1em;
       }
       </style>
   </head>
   <body>
     
-    <iframe src="https://free.timeanddate.com/clock/i8lz2uh1/n302/tluk/fn12/fs20/fc0e1a40/tc946e8b/pct/ftb/tt1" frameborder="0" width="349" height="22" align="right" float></iframe>
-    
-    <h1>
-        My Watch Data 
-    </h1>
-
+    <iframe src="https://free.timeanddate.com/clock/i9dk06r5/n302/tluk/fn12/fs22/tcbbb/ftb/bas2/bat1/bacfff/pa8/tt1" frameborder="0" width="349" height="50" align="right" float></iframe>
+    <br>
+    <br>
     <h3>
         Recent Daily Steps
     </h3>
@@ -32,15 +38,15 @@
 
     <embed type="text/html" src="{{url_for('static', filename='long_term_steps.html')}}" width="100%" height="500">
 
-    <h3>
+    <h4>
         Recent Active Level
-    </h3>
+    </h4>
 
     <embed type="text/html" src="{{url_for('static', filename='prop_act.html')}}" width="100%" height="500">
 
-    <h3>
+    <h4>
         Long Term Active Level
-    </h3>
+    </h4>
 
     <embed type="text/html" src="{{url_for('static', filename='long_term_activity.html')}}" width="100%" height="500">
 
