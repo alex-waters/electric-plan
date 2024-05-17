@@ -178,6 +178,6 @@ lt_act_plot.update_xaxes(
 )
 lt_act_plot.update_yaxes(
     fixedrange=True,
-    autorangeoptions_maxallowed=15000
+    autorangeoptions={'maxallowed':15000}
 )
 lt_act_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_activity.html')
