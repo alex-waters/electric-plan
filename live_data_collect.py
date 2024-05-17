@@ -5,8 +5,9 @@ This class is only used when the user chooses another region that hasn't been pr
 import requests
 import os
 import pytz
-from datetime import datetime
+import datetime as dt
 import plotly.graph_objs as go
+
 
 class NewPlot:
 
@@ -22,7 +23,7 @@ class NewPlot:
             )
         except FileNotFoundError:
             pass
-        utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
+        utc_time = dt.datetime.strftime(dt.datetime.now(dt.UTC), '%Y-%m-%dT%H:%MZ')
         api_url = '''
                 https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/{}
             '''.format(utc_time, self.chosen_region)
@@ -48,7 +49,7 @@ class NewPlot:
 
             extracted['times'].append(
                 pytz.timezone('utc').localize(
-                datetime.strptime(interval['from'], '%Y-%m-%dT%H:%MZ')
+                    dt.datetime.strptime(interval['from'], '%Y-%m-%dT%H:%MZ')
                     ).astimezone(pytz.timezone('Europe/London'))
             )
             extracted['intensities'].append(
@@ -58,7 +59,6 @@ class NewPlot:
                     extracted[mix['fuel']].append(mix['perc'])
                 except KeyError:
                     pass
-
 
         ints_line = dict(
             x=extracted['times'],
@@ -140,7 +140,6 @@ class NewPlot:
             marker={'color': '#848484'},
             stackgroup='one'
         )
-
 
         data_to_plot = [
             solar_bar, hydro_bar, wind_bar, nuclear_bar, gas_bar,

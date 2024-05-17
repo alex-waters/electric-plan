@@ -1,7 +1,7 @@
 import requests
 import os
 import pytz
-from datetime import datetime
+import datetime as dt
 import plotly.graph_objs as go
 
 # del the old carbon plot explicitly
@@ -10,7 +10,7 @@ try:
 except FileNotFoundError:
     pass
 
-utc_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%MZ')
+utc_time = dt.datetime.strftime(dt.datetime.now(dt.UTC), '%Y-%m-%dT%H:%MZ')
 api_url = '''
         https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/3
     '''.format(utc_time)
@@ -35,8 +35,8 @@ for interval in fcast_data['data']['data']:
 
     extracted['times'].append(
         pytz.timezone('utc').localize(
-        datetime.strptime(interval['from'], '%Y-%m-%dT%H:%MZ')
-            ).astimezone(pytz.timezone('Europe/London'))
+            dt.datetime.strptime(interval['from'], '%Y-%m-%dT%H:%MZ')
+                ).astimezone(pytz.timezone('Europe/London'))
     )
     extracted['intensities'].append(
         interval['intensity']['forecast'])

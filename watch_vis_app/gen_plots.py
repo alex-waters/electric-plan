@@ -24,7 +24,7 @@ for d in measures['body']['activities']:
     except ZeroDivisionError:
         active_prop.append(0)
         intense_prop.append(0)
-inactive_prop = [1-(x+y) for x,y in [x for x in zip(active_prop, intense_prop)]]
+inactive_prop = [1-(x+y) for x, y in [x for x in zip(active_prop, intense_prop)]]
 
 # round the figures to improve plotly visuals
 active_prop = [round(x*100) for x in active_prop]
@@ -112,7 +112,7 @@ prop_act_plot.update_traces(
 )
 prop_act_plot.update_layout(
     plot_bgcolor='#ffffff',
-    hovermode = 'x unified'
+    hovermode='x unified'
 )
 prop_act_plot.update_xaxes(
     fixedrange=True
@@ -130,16 +130,18 @@ straight = LinearRegression().fit(
 )
 straight_predicts = straight.predict(numpy.array(time_passage).reshape(-1, 1))
 
-def SMA(data,lag=10):
-    sma = []
+
+# create function to return Simple Moving Av
+def sma(data, lag=10):
+    av_values = []
     for i in range(lag):
-        sma.append(numpy.nan)
-    for i in range(lag,len(data)):
-        sma.append(numpy.mean(data[i-lag:i]))
-    return numpy.array(sma)
+        av_values.append(numpy.nan)
+    for i in range(lag, len(data)):
+        av_values.append(numpy.mean(data[i-lag:i]))
+    return numpy.array(av_values)
 
 
-mv_avg_activity = SMA(activity)
+mv_avg_activity = sma(activity)
 
 lt_act_plot = go.Figure(data=[
     go.Scatter(
@@ -165,7 +167,7 @@ lt_act_plot.add_trace(go.Scatter(
 ))
 lt_act_plot.update_layout(
     plot_bgcolor='#ffffff',
-    hovermode = 'x unified'
+    hovermode='x unified'
 )
 lt_act_plot.update_xaxes(
     fixedrange=True

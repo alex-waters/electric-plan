@@ -2,7 +2,7 @@ import re
 import requests
 import datetime
 
-#pull a list of ip addresses from log file
+# pull a list of ip addresses from log file
 found_ips = []
 with open('/var/log/anw.pythonanywhere.com.access.log') as access_log:
     for event in access_log:
@@ -14,7 +14,7 @@ with open('/var/log/anw.pythonanywhere.com.access.log') as access_log:
                     "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}",
                     event
                     )[0],
-                datetime.datetime.strftime(event_date, '%A    %d %B')]
+                    datetime.datetime.strftime(event_date, '%A    %d %B')]
                 )
     access_log.close()
 
