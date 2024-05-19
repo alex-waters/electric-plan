@@ -23,7 +23,7 @@ class NewPlot:
             )
         except FileNotFoundError:
             pass
-        utc_time = dt.datetime.strftime(dt.datetime.now(dt.UTC), '%Y-%m-%dT%H:%MZ')
+        utc_time = dt.datetime.strftime(dt.datetime.now(dt.timezone.utc), '%Y-%m-%dT%H:%MZ')
         api_url = '''
                 https://api.carbonintensity.org.uk/regional/intensity/{}/fw48h/regionid/{}
             '''.format(utc_time, self.chosen_region)
