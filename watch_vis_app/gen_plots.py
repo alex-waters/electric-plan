@@ -45,16 +45,16 @@ for s in steps:
 days_to_vis = 15 + datetime.today().weekday()
 steps_plot = go.Figure(data=[
     go.Bar(
-        name='Steps', 
-        x=activity_dates[-days_to_vis:], 
-        y=cleaned_steps[-days_to_vis:], 
+        name='Steps',
+        x=activity_dates[-days_to_vis:],
+        y=cleaned_steps[-days_to_vis:],
         text=cleaned_steps[-days_to_vis:]
     )
 ])
 steps_plot.update_traces(
-    marker_color='#c8abc1', 
+    marker_color='#c8abc1',
     marker_line_color='#946E8B',
-    marker_line_width=1.5, 
+    marker_line_width=1.5,
     opacity=0.6,
     textposition='outside',
     textfont_color='black',
@@ -78,9 +78,9 @@ steps_plot.write_html('/home/anw/mysite/electric-plan/static/daily_steps.html')
 # long term steps
 lt_steps_plot = go.Figure(data=[
     go.Scatter(
-        name='Long Term Steps', 
-        x=activity_dates, 
-        y=cleaned_steps, 
+        name='Long Term Steps',
+        x=activity_dates,
+        y=cleaned_steps,
         mode='lines'
     )
 ])
@@ -102,8 +102,8 @@ lt_steps_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_steps.
 # recent proportion of day being active
 prop_act_plot = go.Figure(data=[
     go.Bar(
-        name='Level of Activity', 
-        x=activity_dates[-days_to_vis:], 
+        name='Level of Activity',
+        x=activity_dates[-days_to_vis:],
         y=active_prop[-days_to_vis:]
     )
 ])
@@ -149,8 +149,8 @@ mv_avg_activity = sma(smooth_act)
 
 lt_act_plot = go.Figure(data=[
     go.Scatter(
-        name='Long Term Activity', 
-        x=activity_dates, 
+        name='Long Term Activity',
+        x=activity_dates,
         y=activity,
         marker_color='#6D9476'
     )
@@ -172,6 +172,7 @@ lt_act_plot.add_trace(go.Scatter(
 lt_act_plot.add_hline(
     y=1800,
     line_dash='dot',
+    line_color='red',
     annotation_text="WHO Activity Min",
     annotation_position="bottom right"
 )
