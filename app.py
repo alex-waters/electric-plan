@@ -3,8 +3,11 @@ import time
 import live_data_collect
 from flask import Flask, render_template, send_from_directory, request, Response
 
-
-app = Flask(__name__)
+# instantiate app with static path to help PA distributed filesystem
+app = Flask(
+    __name__,
+    static_url_path='/home/anw/mysite/electric-plan/static/'
+)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
