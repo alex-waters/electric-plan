@@ -18,8 +18,8 @@ elif first_record == dt.datetime.today().date() + dt.timedelta(days=1):
     todays = [oct_data['results'][1]['valid_to'][0:10], oct_data['results'][1]['value_inc_vat']]
     tmws = [oct_data['results'][0]['valid_to'][0:10], oct_data['results'][0]['value_inc_vat']]
 else:
-    todays = ('Not Fetched', 'Check Elsewhere')
-    tmws = ('Not Fetched', 'Check Elsewhere')
+    todays = ['Not Fetched', 'Check Elsewhere']
+    tmws = ['Not Fetched', 'Check Elsewhere']
 
 todays[1] = round(float(todays[1])) if type(todays[1]) != str else todays
 tmws[1] = round(float(tmws[1])) if type(tmws[1]) != str else tmws
