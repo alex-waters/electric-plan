@@ -10,7 +10,7 @@ oct_data = oct_response.json()
 print_queue = []
 for r in oct_data['results'][0:5]:
     record_date = dt.datetime.strptime(
-        r['valid_to'][0:10], '%Y-%m-%d'
+        r['valid_from'][0:10], '%Y-%m-%d'
     ).date()
     if record_date >= dt.datetime.today().date():
         print_queue.append(list(
