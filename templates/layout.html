@@ -10,6 +10,9 @@
       h4 {
         background-color: #a0db8e;
       }
+      div {
+        width: 97%
+      }
       </style>
   </head>
   <body>
@@ -27,8 +30,8 @@
     <br>
     <H5>Select your region: </H5><br>
 
-    <form action="" method="post" name="region_choose">
-      <select name="menu" id="region">
+    <form action="" method="post" name="region_choose" autocomplete="off">
+      <select name="menu" id="region" autocomplete="off">
       <option value="1">N Scotland - Scottish Hydro Electric Power</option>
       <option value="2">S Scotland - SP Distribution</option>
       <option value="4">NE England - NPG North East</option>
@@ -43,15 +46,30 @@
       <option value="13">London - UKPN London</option>
       <option value="14">SE England - UKPN South East</option>
       </select>
-      <input type="submit">
+      <input type="submit" autocomplete="off">
     </form>
     <br>
     <embed type="text/html" src="{{url_for('static', filename='carbon_plot_4.html')}}" width="100%" height="500">
 
+    <h4> Prices for Octopus Tracker (p/kwh)</h4>
+    <img src="{{url_for('static', filename='elec_prices.png')}}">
+
+    <h4> Forecast for Wind Speeds</h4>
+    <div
+            data-windywidget="forecast"
+            data-thememode="white"
+            data-tempunit="C"
+            data-windunit="mph"
+            data-spotid="78158"
+            data-appid="widgets_1b080b5191">
+    </div>
+    <script async="true" data-cfasync="false" type="text/javascript" src="https://windy.app/widgets-code/forecast/windy_forecast_async.js?v1.4.6"></script>
+
     <footer class="footer">
-      <small>Made by <a href="https://www.linkedin.com/in/alex-waters-01449534/">Alex</a></small>
+      <img src="{{url_for('static', filename='favicon.png')}}" width="80px" height="50px">
       <br>
-      <img src="{{url_for('static', filename='favicon.png')}}" width="50px" height="50px">
+      <small>Made by <a href="https://x.com/seeing_clearly">Alex</a></small>
+      <br>
     </footer>
   </body>
 </html>
