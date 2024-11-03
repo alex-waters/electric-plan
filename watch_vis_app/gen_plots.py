@@ -173,11 +173,10 @@ lt_act_plot.add_trace(go.Scatter(
     marker_color='#202c23'
 ))
 lt_act_plot.add_hline(
+    name='WHO Min',
     y=1800,
     line_dash='dot',
-    line_color='red',
-    annotation_text="WHO Activity Min",
-    annotation_position="bottom right"
+    line_color='red'
 )
 lt_act_plot.update_layout(
     plot_bgcolor='#ffffff',
