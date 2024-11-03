@@ -148,11 +148,14 @@ def sma(data, lag=10):
 mv_avg_activity = sma(smooth_act)
 
 lt_act_plot = go.Figure(data=[
-    go.Bar(
+    go.Scatter(
         name='Long Term Activity',
         x=activity_dates,
         y=activity,
-        marker_color='#6D9476'
+        marker={
+            'color': ['#F199AD' if a>=1800 else '#99f1dd' for a in activity],
+            'size': [10 for a in activity]
+        }
     )
 ])
 lt_act_plot.add_trace(go.Scatter(
