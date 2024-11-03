@@ -2,8 +2,12 @@ import json
 import numpy
 import random
 import plotly.graph_objects as go
+import plotly.io as pio
 from datetime import datetime
 from sklearn.linear_model import LinearRegression
+
+# set the width of the image files written out
+pio.kaleido.scope.default_width = 1500
 
 # Read in the sourcedata
 measures_file = open('/home/anw/mysite/electric-plan/DATA/measure_data.txt')
