@@ -119,7 +119,9 @@ prop_act_plot.update_layout(
     hovermode='x unified'
 )
 prop_act_plot.update_xaxes(
-    fixedrange=True
+    fixedrange=True,
+    dtick="D1",
+    tickformat="%A<br>%d %b"
 )
 prop_act_plot.update_yaxes(
     fixedrange=True
