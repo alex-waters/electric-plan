@@ -161,5 +161,5 @@ fig.update_layout(
 
 fig.write_html(
     '/home/anw/mysite/electric-plan/static/carbon_plot_4.html',
-    include_plotlyjs='False'
+    include_plotlyjs='cdn'
 )
