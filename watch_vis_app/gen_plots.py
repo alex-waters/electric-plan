@@ -158,7 +158,7 @@ lt_act_plot = go.Figure(data=[
         y=activity,
         mode='markers',
         marker={
-            'color': ['#F199AD' if a>=1800 else '#99f1dd' for a in activity],
+            'color': ['#99f1dd' if a>=1800 else '#F199AD' for a in activity],
             'size': [10 for a in activity]
         }
     )
