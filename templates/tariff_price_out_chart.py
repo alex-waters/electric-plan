@@ -9,14 +9,17 @@ oct_data = oct_response.json()
 
 print_queue = []
 for r in oct_data['results'][0:5]:
-    record_date = dt.datetime.strptime(
-        r['valid_from'][0:10], '%Y-%m-%d'
-    ).date()
-    if record_date >= dt.datetime.today().date():
-        print_queue.append(list(
-            [dt.datetime.strftime(record_date, '%A %d %b'),
-             round(float(r['value_inc_vat']))]
-        ))
+    record_from = dt.datetime.strptime(
+        r['valid_from'], '%Y-%m-%dT%H:%M:%SZ'
+    )
+    record_to = dt.datetime.strptime(
+        r['valid_to'], '%Y-%m-%dT%H:%M:%SZ'
+    )
+    record_date = record_from+dt.timedelta(hours=6)
+    print_queue.append(list(
+        [dt.datetime.strftime(record_date, '%A %d %b'),
+         round(float(r['value_inc_vat']))]
+    ))
 print_queue.reverse()       # reverse is for printed image to have asc dates
 
 im = Image.new(mode='RGB', size=(1000, 300), color=(255,255,255))

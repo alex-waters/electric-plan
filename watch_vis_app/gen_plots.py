@@ -2,8 +2,12 @@ import json
 import numpy
 import random
 import plotly.graph_objects as go
+import plotly.io as pio
 from datetime import datetime
 from sklearn.linear_model import LinearRegression
+
+# set the width of the image files written out
+pio.kaleido.scope.default_width = 1500
 
 # Read in the sourcedata
 measures_file = open('/home/anw/mysite/electric-plan/DATA/measure_data.txt')
@@ -73,7 +77,7 @@ steps_plot.update_yaxes(
     fixedrange=True,
     range=[0, max(cleaned_steps[-days_to_vis:])*1.2]
 )
-steps_plot.write_html('/home/anw/mysite/electric-plan/static/daily_steps.html')
+steps_plot.write_image('/home/anw/mysite/electric-plan/static/daily_steps.png')
 
 # long term steps
 lt_steps_plot = go.Figure(data=[
@@ -97,7 +101,7 @@ lt_steps_plot.update_xaxes(
 lt_steps_plot.update_yaxes(
     fixedrange=True
 )
-lt_steps_plot.write_html('/home/anw/mysite/electric-plan/static/long_term_steps.html')
+lt_steps_plot.write_image('/home/anw/mysite/electric-plan/static/long_term_steps.png')
 
 # recent proportion of day being active
 prop_act_plot = go.Figure(data=[
@@ -115,12 +119,14 @@ prop_act_plot.update_layout(
     hovermode='x unified'
 )
 prop_act_plot.update_xaxes(
-    fixedrange=True
+    fixedrange=True,
+    dtick="D1",
+    tickformat="%A<br>%d %b"
 )
 prop_act_plot.update_yaxes(
     fixedrange=True
 )
-prop_act_plot.write_html('/home/anw/mysite/electric-plan/static/prop_act.html')
+prop_act_plot.write_image('/home/anw/mysite/electric-plan/static/prop_act.png')
 
 # long term absolute activity levels
 
@@ -148,11 +154,15 @@ def sma(data, lag=10):
 mv_avg_activity = sma(smooth_act)
 
 lt_act_plot = go.Figure(data=[
-    go.Bar(
+    go.Scatter(
         name='Long Term Activity',
         x=activity_dates,
         y=activity,
-        marker_color='#6D9476'
+        mode='markers',
+        marker={
+            'color': ['#99f1dd' if a>=1800 else '#F199AD' for a in activity],
+            'size': [10 for a in activity]
+        }
     )
 ])
 lt_act_plot.add_trace(go.Scatter(
@@ -170,11 +180,10 @@ lt_act_plot.add_trace(go.Scatter(
     marker_color='#202c23'
 ))
 lt_act_plot.add_hline(
+    name='WHO Min',
     y=1800,
     line_dash='dot',
-    line_color='red',
-    annotation_text="WHO Activity Min",
-    annotation_position="bottom right"
+    line_color='red'
 )
 lt_act_plot.update_layout(
     plot_bgcolor='#ffffff',
