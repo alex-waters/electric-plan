@@ -174,7 +174,9 @@ lt_act_plot.add_hline(
     line_dash='dot',
     line_color='red',
     annotation_text="WHO Activity Min",
-    annotation_position="bottom right"
+    annotation_position="bottom right",
+    annotation_font_size=17,
+    annotation_font_color='red'
 )
 lt_act_plot.update_layout(
     plot_bgcolor='#ffffff',
