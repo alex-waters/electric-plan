@@ -11,11 +11,11 @@ with open('/var/log/anw.pythonanywhere.com.access.log') as access_log:
         if datetime.date.today() - event_date.date() < datetime.timedelta(8):
             found_ips.append(
                 [re.findall(
-                    "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}",
+                    r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}",
                     event
-                    )[0],
-                    datetime.datetime.strftime(event_date, '%A    %d %B')]
-                )
+                )[0],
+                datetime.datetime.strftime(event_date, '%A    %d %B')]
+            )
     access_log.close()
 
 search_ips = set([x[0] for x in found_ips])
@@ -33,4 +33,4 @@ with open('/home/anw/mysite/electric-plan/static/ips.txt', 'a') as ip_out:
         ip_out.write(i + '\n')
     ip_out.write('\n All traffic: \n')
     for i in found_ips:
-        ip_out.write(str(i[0]) + '    ' + str(i[1]) + '\n')        
+        ip_out.write(str(i[0]) + '    ' + str(i[1]) + '\n')
