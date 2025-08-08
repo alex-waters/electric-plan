@@ -77,7 +77,10 @@ steps_plot.update_yaxes(
     fixedrange=True,
     range=[0, max(cleaned_steps[-days_to_vis:])*1.2]
 )
-steps_plot.write_image('/home/anw/mysite/electric-plan/static/daily_steps.png')
+steps_plot.write_image(
+    '/home/anw/mysite/electric-plan/static/daily_steps.png',
+    format='png'
+)
 
 # long term steps
 lt_steps_plot = go.Figure(data=[
@@ -101,7 +104,10 @@ lt_steps_plot.update_xaxes(
 lt_steps_plot.update_yaxes(
     fixedrange=True
 )
-lt_steps_plot.write_image('/home/anw/mysite/electric-plan/static/long_term_steps.png')
+lt_steps_plot.write_image(
+    '/home/anw/mysite/electric-plan/static/long_term_steps.png',
+    format='png'
+)
 
 # recent proportion of day being active
 prop_act_plot = go.Figure(data=[
@@ -126,7 +132,10 @@ prop_act_plot.update_xaxes(
 prop_act_plot.update_yaxes(
     fixedrange=True
 )
-prop_act_plot.write_image('/home/anw/mysite/electric-plan/static/prop_act.png')
+prop_act_plot.write_image(
+    '/home/anw/mysite/electric-plan/static/prop_act.png',
+    format='png'
+)
 
 # long term absolute activity levels
 
