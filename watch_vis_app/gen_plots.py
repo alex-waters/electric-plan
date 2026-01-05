@@ -21,7 +21,8 @@ activity = []
 for d in measures['body']['activities']:
     activity_dates.append(d['date'])
     steps.append(d['steps'])
-    activity.append(d['active']) if int(d['active']) > 0 else activity.append(0)
+    if datetime.strptime(['date'], '%Y-%m-%d').weekday() != 5:      # remove saturdays
+        activity.append(d['active']) if int(d['active']) > 0 else activity.append(0)
     try:
         active_prop.append(d['active']/(d['soft'] + d['moderate'] + d['intense']))
         intense_prop.append(d['intense']/(d['soft'] + d['moderate'] + d['intense']))
@@ -34,7 +35,7 @@ inactive_prop = [1-(x+y) for x, y in [x for x in zip(active_prop, intense_prop)]
 active_prop = [round(x*100) for x in active_prop]
 inactive_prop = [round(x*100) for x in inactive_prop]
 
-# synthesise some more accurate figures
+# synthesise some more accurate figures to deal with unlikely counts
 cleaned_steps = []
 for s in steps:
     if s < 750:
@@ -83,31 +84,33 @@ steps_plot.write_image(
 )
 
 # long term steps
-lt_steps_plot = go.Figure(data=[
-    go.Scatter(
-        name='Long Term Steps',
-        x=activity_dates,
-        y=cleaned_steps,
-        mode='lines'
-    )
-])
-lt_steps_plot.update_traces(
-    marker_color='#946E8B'
-)
-lt_steps_plot.update_layout(
-    plot_bgcolor='#ffffff',
-    hovermode='x unified'
-)
-lt_steps_plot.update_xaxes(
-    fixedrange=True
-)
-lt_steps_plot.update_yaxes(
-    fixedrange=True
-)
-lt_steps_plot.write_image(
-    '/home/anw/mysite/electric-plan/static/long_term_steps.png',
-    format='png'
-)
+# removed as not easily readable or insightful
+
+# lt_steps_plot = go.Figure(data=[
+#     go.Scatter(
+#         name='Long Term Steps',
+#         x=activity_dates,
+#         y=cleaned_steps,
+#         mode='lines'
+#     )
+# ])
+# lt_steps_plot.update_traces(
+#     marker_color='#946E8B'
+# )
+# lt_steps_plot.update_layout(
+#     plot_bgcolor='#ffffff',
+#     hovermode='x unified'
+# )
+# lt_steps_plot.update_xaxes(
+#     fixedrange=True
+# )
+# lt_steps_plot.update_yaxes(
+#     fixedrange=True
+# )
+# lt_steps_plot.write_image(
+#     '/home/anw/mysite/electric-plan/static/long_term_steps.png',
+#     format='png'
+# )
 
 # recent proportion of day being active
 prop_act_plot = go.Figure(data=[
@@ -142,7 +145,7 @@ prop_act_plot.write_image(
 # remove outliers from activity so overall trend easier to see
 smooth_act = [x if x in range(0, 12001) else 3000 for x in activity]
 
-time_passage = [(activity_dates.index(x)-len(activity_dates))*-1 for x in activity_dates]
+time_passage = [(activity.index(x)-len(activity))*-1 for x in activity]
 straight = LinearRegression().fit(
     numpy.array(time_passage).reshape(-1, 1),
     smooth_act
