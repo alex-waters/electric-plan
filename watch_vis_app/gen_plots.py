@@ -21,7 +21,7 @@ activity = []
 for d in measures['body']['activities']:
     activity_dates.append(d['date'])
     steps.append(d['steps'])
-    if datetime.strptime(['date'], '%Y-%m-%d').weekday() != 5:      # remove saturdays
+    if datetime.strptime(d['date'], '%Y-%m-%d').weekday() != 5:      # remove saturdays
         activity.append(d['active']) if int(d['active']) > 0 else activity.append(0)
     try:
         active_prop.append(d['active']/(d['soft'] + d['moderate'] + d['intense']))
