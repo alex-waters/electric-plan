@@ -133,12 +133,58 @@ prop_act_plot.update_xaxes(
     tickformat="%A<br>%d %b"
 )
 prop_act_plot.update_yaxes(
-    fixedrange=True
+    fixedrange=True,
+    title='Active Minutes'
 )
 prop_act_plot.write_image(
     '/home/anw/mysite/electric-plan/static/prop_act.png',
     format='png'
 )
+
+# dial guages
+
+guage_wk =  8 + datetime.today().weekday()
+week_rag_status = go.Figure(data=[
+    go.Indicator(
+        mode="gauge+number+delta",
+        value=numpy.median(activity[-guage_wk:]),
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': "Week Av Active Seconds", 'font': {'size': 24}},
+        delta={'reference': numpy.median(activity), 'increasing': {'color': '#99f1dd'}},
+        gauge={
+            'axis': {'range': [None, numpy.percentile(activity, 90)], 'tickcolor': '#6D9476'},
+            'bar': {'color': '#6D9476'},
+            'steps': [
+                {'range': [0, 1800], 'color': '#F199AD'},
+                {'range': [1800, 3000], 'color': '#F2B199'},
+                {'range': [3000, 5000], 'color': '#6D9476'},
+                {'range': [5000, 50000], 'color': '#51a560'}
+            ]
+        }
+    )
+])
+week_rag_status.write_image('/home/anw/mysite/electric-plan/static/week_rag_guage.png')
+guage_mnth = 30 + datetime.today().weekday()
+month_rag_status = go.Figure(data=[
+    go.Indicator(
+        mode="gauge+number+delta",
+        value=numpy.median(activity[-guage_mnth:]),
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': "Month Av Active Seconds", 'font': {'size': 24}},
+        delta={'reference': numpy.median(activity), 'increasing': {'color': '#99f1dd'}},
+        gauge={
+            'axis': {'range': [None, numpy.percentile(activity, 90)], 'tickcolor': '#6D9476'},
+            'bar': {'color': '#6D9476'},
+            'steps': [
+                {'range': [0, 1800], 'color': '#F199AD'},
+                {'range': [1800, 3000], 'color': '#F2B199'},
+                {'range': [3000, 5000], 'color': '#6D9476'},
+                {'range': [5000, 50000], 'color': '#51a560'}
+            ]
+        }
+    )
+])
+month_rag_status.write_image('/home/anw/mysite/electric-plan/static/month_rag_guage.png')
 
 # long term absolute activity levels
 
