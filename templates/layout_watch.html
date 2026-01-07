@@ -24,6 +24,12 @@
         max - width: 100%;
         height: auto;
       }
+      }
+      .container {
+        width: 80%;
+        margin: 0 auto;
+        background - color: lightgray;
+      }
       </style>
   </head>
   <body>
@@ -35,7 +41,7 @@
         Recent Daily Steps
     </h3>
 
-    <embed type="text/html" src="{{url_for('static', filename='daily_steps.png')}}" width="100%" height="600">
+    <img class="container" src="{{url_for('static', filename='daily_steps.png')}}" alt="daily steps">
 
 
     <h4>
