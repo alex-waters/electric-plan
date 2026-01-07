@@ -136,9 +136,8 @@ prop_act_plot.update_yaxes(
     fixedrange=True,
     title='Active Minutes'
 )
-prop_act_plot.write_image(
-    '/home/anw/mysite/electric-plan/static/prop_act.png',
-    format='png'
+prop_act_plot.write_html(
+    '/home/anw/mysite/electric-plan/static/prop_act.html'
 )
 
 # dial guages
