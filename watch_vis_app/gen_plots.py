@@ -156,13 +156,14 @@ week_rag_status = go.Figure(data=[
             'steps': [
                 {'range': [0, 1800], 'color': '#F199AD'},
                 {'range': [1800, 3000], 'color': '#F2B199'},
-                {'range': [3000, 5000], 'color': '#6D9476'},
+                {'range': [3000, 5000], 'color': '#b5db8d'},
                 {'range': [5000, 50000], 'color': '#51a560'}
             ]
         }
     )
 ])
 week_rag_status.write_image('/home/anw/mysite/electric-plan/static/week_rag_guage.png')
+
 guage_mnth = 30 + datetime.today().weekday()
 month_rag_status = go.Figure(data=[
     go.Indicator(
