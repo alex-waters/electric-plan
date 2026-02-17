@@ -21,8 +21,7 @@ activity = []
 for d in measures['body']['activities']:
     activity_dates.append(d['date'])
     steps.append(d['steps'])
-    if datetime.strptime(d['date'], '%Y-%m-%d').weekday() != 5:      # remove saturdays
-        activity.append(d['active']) if int(d['active']) > 0 else activity.append(0)
+    activity.append(d['active']) if int(d['active']) > 0 else activity.append(0)
     try:
         active_prop.append(d['active']/(d['soft'] + d['moderate'] + d['intense']))
         intense_prop.append(d['intense']/(d['soft'] + d['moderate'] + d['intense']))
@@ -30,6 +29,9 @@ for d in measures['body']['activities']:
         active_prop.append(0)
         intense_prop.append(0)
 inactive_prop = [1-(x+y) for x, y in [x for x in zip(active_prop, intense_prop)]]
+# make a new correctly dated store of activity
+date_stamped = list(zip(activity_dates, activity))
+
 
 # round the figures to improve plotly visuals
 active_prop = [round(x*100) for x in active_prop]
@@ -214,8 +216,9 @@ mv_avg_activity = sma(smooth_act)
 lt_act_plot = go.Figure(data=[
     go.Scatter(
         name='Long Term Activity',
-        x=activity_dates,
-        y=activity,
+        # remove saturdays (ideally edit this to one-step operation)
+        x=[x[0] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5],
+        y=[x[1] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5],
         mode='markers',
         marker={
             'color': ['#99f1dd' if a>=1800 else '#F199AD' for a in activity],
