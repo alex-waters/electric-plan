@@ -190,10 +190,13 @@ month_rag_status.write_image('/home/anw/mysite/electric-plan/static/month_rag_gu
 
 # long term absolute activity levels
 
+# remove saturdays
+weekday_dates = [x[0] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5]
+weekday_act = [x[1] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5]
 # remove outliers from activity so overall trend easier to see
-smooth_act = [x if x in range(0, 12001) else 3000 for x in activity]
+smooth_act = [x if x in range(0, 12001) else 3000 for x in weekday_act]
 
-time_passage = [(activity.index(x)-len(activity))*-1 for x in activity]
+time_passage = [(weekday_act.index(x)-len(weekday_act))*-1 for x in weekday_act]
 straight = LinearRegression().fit(
     numpy.array(time_passage).reshape(-1, 1),
     smooth_act
@@ -217,25 +220,25 @@ lt_act_plot = go.Figure(data=[
     go.Scatter(
         name='Long Term Activity',
         # remove saturdays (ideally edit this to one-step operation)
-        x=[x[0] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5],
-        y=[x[1] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5],
+        x=weekday_dates,
+        y=weekday_act,
         mode='markers',
         marker={
-            'color': ['#99f1dd' if a>=1800 else '#F199AD' for a in activity],
-            'size': [10 for a in activity]
+            'color': ['#99f1dd' if a>=1800 else '#F199AD' for a in weekday_act],
+            'size': [10 for a in weekday_act],
         }
     )
 ])
 lt_act_plot.add_trace(go.Scatter(
     name='Trend',
-    x=activity_dates,
+    x=weekday_dates,
     y=straight_predicts,
     mode='lines',
     marker_color='#415846'
 ))
 lt_act_plot.add_trace(go.Scatter(
     name='Poly Trend',
-    x=activity_dates,
+    x=weekday_dates,
     y=mv_avg_activity,
     mode='lines',
     marker_color='#202c23'
