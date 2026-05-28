@@ -2,7 +2,7 @@ import requests
 import datetime as dt
 from PIL import Image, ImageDraw, ImageFont
 
-api_url = '''https://api.octopus.energy/v1/products/SILVER-24-07-01/electricity-tariffs/E-1R-SILVER-24-07-01-G/standard-unit-rates/'''
+api_url = '''https://api.octopus.energy/v1/products/SILVER-26-04-01/electricity-tariffs/E-1R-SILVER-26-04-01-G/standard-unit-rates/'''
 
 oct_response = requests.get(str(api_url))
 oct_data = oct_response.json()
