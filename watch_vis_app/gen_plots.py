@@ -29,12 +29,15 @@ for d in measures['body']['activities']:
         active_prop.append(0)
         intense_prop.append(0)
 inactive_prop = [1-(x+y) for x, y in [x for x in zip(active_prop, intense_prop)]]
+# make a new correctly dated store of activity
+date_stamped = list(zip(activity_dates, activity))
+
 
 # round the figures to improve plotly visuals
 active_prop = [round(x*100) for x in active_prop]
 inactive_prop = [round(x*100) for x in inactive_prop]
 
-# synthesise some more accurate figures
+# synthesise some more accurate figures to deal with unlikely counts
 cleaned_steps = []
 for s in steps:
     if s < 750:
@@ -83,31 +86,33 @@ steps_plot.write_image(
 )
 
 # long term steps
-lt_steps_plot = go.Figure(data=[
-    go.Scatter(
-        name='Long Term Steps',
-        x=activity_dates,
-        y=cleaned_steps,
-        mode='lines'
-    )
-])
-lt_steps_plot.update_traces(
-    marker_color='#946E8B'
-)
-lt_steps_plot.update_layout(
-    plot_bgcolor='#ffffff',
-    hovermode='x unified'
-)
-lt_steps_plot.update_xaxes(
-    fixedrange=True
-)
-lt_steps_plot.update_yaxes(
-    fixedrange=True
-)
-lt_steps_plot.write_image(
-    '/home/anw/mysite/electric-plan/static/long_term_steps.png',
-    format='png'
-)
+# removed as not easily readable or insightful
+
+# lt_steps_plot = go.Figure(data=[
+#     go.Scatter(
+#         name='Long Term Steps',
+#         x=activity_dates,
+#         y=cleaned_steps,
+#         mode='lines'
+#     )
+# ])
+# lt_steps_plot.update_traces(
+#     marker_color='#946E8B'
+# )
+# lt_steps_plot.update_layout(
+#     plot_bgcolor='#ffffff',
+#     hovermode='x unified'
+# )
+# lt_steps_plot.update_xaxes(
+#     fixedrange=True
+# )
+# lt_steps_plot.update_yaxes(
+#     fixedrange=True
+# )
+# lt_steps_plot.write_image(
+#     '/home/anw/mysite/electric-plan/static/long_term_steps.png',
+#     format='png'
+# )
 
 # recent proportion of day being active
 prop_act_plot = go.Figure(data=[
@@ -130,19 +135,68 @@ prop_act_plot.update_xaxes(
     tickformat="%A<br>%d %b"
 )
 prop_act_plot.update_yaxes(
-    fixedrange=True
+    fixedrange=True,
+    title='Active Minutes'
 )
-prop_act_plot.write_image(
-    '/home/anw/mysite/electric-plan/static/prop_act.png',
-    format='png'
+prop_act_plot.write_html(
+    '/home/anw/mysite/electric-plan/static/prop_act.html'
 )
+
+# dial guages
+
+guage_wk =  8 + datetime.today().weekday()
+week_rag_status = go.Figure(data=[
+    go.Indicator(
+        mode="gauge+number+delta",
+        value=numpy.median(activity[-guage_wk:]),
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': "Week Av Active Seconds", 'font': {'size': 24}},
+        delta={'reference': numpy.median(activity), 'increasing': {'color': '#99f1dd'}},
+        gauge={
+            'axis': {'range': [None, numpy.percentile(activity, 90)], 'tickcolor': '#6D9476'},
+            'bar': {'color': '#6D9476'},
+            'steps': [
+                {'range': [0, 1800], 'color': '#F199AD'},
+                {'range': [1800, 3000], 'color': '#F2B199'},
+                {'range': [3000, 5000], 'color': '#b5db8d'},
+                {'range': [5000, 50000], 'color': '#51a560'}
+            ]
+        }
+    )
+])
+week_rag_status.write_image('/home/anw/mysite/electric-plan/static/week_rag_guage.png')
+
+guage_mnth = 30 + datetime.today().weekday()
+month_rag_status = go.Figure(data=[
+    go.Indicator(
+        mode="gauge+number+delta",
+        value=numpy.median(activity[-guage_mnth:]),
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': "Month Av Active Seconds", 'font': {'size': 24}},
+        delta={'reference': numpy.median(activity), 'increasing': {'color': '#99f1dd'}},
+        gauge={
+            'axis': {'range': [None, numpy.percentile(activity, 90)], 'tickcolor': '#6D9476'},
+            'bar': {'color': '#6D9476'},
+            'steps': [
+                {'range': [0, 1800], 'color': '#F199AD'},
+                {'range': [1800, 3000], 'color': '#F2B199'},
+                {'range': [3000, 5000], 'color': '#b5db8d'},
+                {'range': [5000, 50000], 'color': '#51a560'}
+            ]
+        }
+    )
+])
+month_rag_status.write_image('/home/anw/mysite/electric-plan/static/month_rag_guage.png')
 
 # long term absolute activity levels
 
+# remove saturdays
+weekday_dates = [x[0] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5]
+weekday_act = [x[1] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5]
 # remove outliers from activity so overall trend easier to see
-smooth_act = [x if x in range(0, 12001) else 3000 for x in activity]
+smooth_act = [x if x in range(0, 12001) else 3000 for x in weekday_act]
 
-time_passage = [(activity_dates.index(x)-len(activity_dates))*-1 for x in activity_dates]
+time_passage = [(weekday_act.index(x)-len(weekday_act))*-1 for x in weekday_act]
 straight = LinearRegression().fit(
     numpy.array(time_passage).reshape(-1, 1),
     smooth_act
@@ -165,25 +219,26 @@ mv_avg_activity = sma(smooth_act)
 lt_act_plot = go.Figure(data=[
     go.Scatter(
         name='Long Term Activity',
-        x=activity_dates,
-        y=activity,
+        # remove saturdays (ideally edit this to one-step operation)
+        x=weekday_dates,
+        y=weekday_act,
         mode='markers',
         marker={
-            'color': ['#99f1dd' if a>=1800 else '#F199AD' for a in activity],
-            'size': [10 for a in activity]
+            'color': ['#99f1dd' if a>=1800 else '#F199AD' for a in weekday_act],
+            'size': [10 for a in weekday_act],
         }
     )
 ])
 lt_act_plot.add_trace(go.Scatter(
     name='Trend',
-    x=activity_dates,
+    x=weekday_dates,
     y=straight_predicts,
     mode='lines',
     marker_color='#415846'
 ))
 lt_act_plot.add_trace(go.Scatter(
     name='Poly Trend',
-    x=activity_dates,
+    x=weekday_dates,
     y=mv_avg_activity,
     mode='lines',
     marker_color='#202c23'
