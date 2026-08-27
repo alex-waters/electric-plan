@@ -43,7 +43,8 @@ measures_df['active_prop'] = measures_df['active']/(
         measures_df['soft'] + measures_df['moderate'] + measures_df['intense'])
 
 # round the figures to improve plotly visuals
-measures_df['active_prop'] = [round(x*100) for x in measures_df['active_prop']]
+measures_df['active_prop'] = measures_df['active_prop'].mul(100).round()
+measures_df['steps'] = measures_df['steps'].round()
 
 # synthesise some more accurate figures to deal with unlikely counts
 cleaned_steps = []
