@@ -1,9 +1,10 @@
 import json
 import numpy
+import pandas as pd
 import random
 import plotly.graph_objects as go
 import plotly.io as pio
-from datetime import datetime
+from datetime import datetime, timedelta
 from sklearn.linear_model import LinearRegression
 
 # set the width of the image files written out
@@ -12,40 +13,48 @@ pio.kaleido.scope.default_width = 1500
 # Read in the sourcedata
 measures_file = open('/home/anw/mysite/electric-plan/DATA/measure_data.txt')
 measures = json.load(measures_file)
+# Turn measures['body']['activities'] into a daily DataFrame and fill missing dates with zero rows
 
-activity_dates = []
-steps = []
-active_prop = []
-intense_prop = []
-activity = []
-for d in measures['body']['activities']:
-    activity_dates.append(d['date'])
-    steps.append(d['steps'])
-    activity.append(d['active']) if int(d['active']) > 0 else activity.append(0)
-    try:
-        active_prop.append(d['active']/(d['soft'] + d['moderate'] + d['intense']))
-        intense_prop.append(d['intense']/(d['soft'] + d['moderate'] + d['intense']))
-    except ZeroDivisionError:
-        active_prop.append(0)
-        intense_prop.append(0)
-inactive_prop = [1-(x+y) for x, y in [x for x in zip(active_prop, intense_prop)]]
-# make a new correctly dated store of activity
-date_stamped = list(zip(activity_dates, activity))
+measures_df = pd.DataFrame(measures["body"]["activities"]).copy()
 
+measures_df["date"] = pd.to_datetime(measures_df["date"])
+measures_df = measures_df.sort_values("date").drop_duplicates("date", keep="last")
+
+yesterday = datetime.today().date() - timedelta(days=1)
+full_date_range = pd.date_range(
+    start=measures_df["date"].min(),
+    end=yesterday,
+    freq="D"
+)
+
+measures_df = (
+    measures_df
+    .set_index("date")
+    .reindex(full_date_range)
+    .rename_axis("date")
+    .reset_index()
+)
+
+numeric_cols = measures_df.select_dtypes(include="number").columns
+measures_df[numeric_cols] = measures_df[numeric_cols].fillna(0)
+
+measures_df["date"] = measures_df["date"].dt.strftime("%Y-%m-%d")
+measures_df['active_prop'] = measures_df['active']/(
+        measures_df['soft'] + measures_df['moderate'] + measures_df['intense'])
 
 # round the figures to improve plotly visuals
-active_prop = [round(x*100) for x in active_prop]
-inactive_prop = [round(x*100) for x in inactive_prop]
+measures_df['active_prop'] = [round(x*100) for x in measures_df['active_prop']]
 
 # synthesise some more accurate figures to deal with unlikely counts
 cleaned_steps = []
-for s in steps:
+for s in measures_df['steps']:
     if s < 750:
         syn = random.randrange(750, 1200)
         cleaned_steps.append(syn)
     else:
         cleaned_steps.append(s)
 
+date_stamped = list(zip(measures_df['date'], measures_df['active']))
 # Generate plots
 
 # recent steps
@@ -53,13 +62,18 @@ days_to_vis = 15 + datetime.today().weekday()
 steps_plot = go.Figure(data=[
     go.Bar(
         name='Steps',
-        x=activity_dates[-days_to_vis:],
+        x=measures_df['date'][-days_to_vis:],
         y=cleaned_steps[-days_to_vis:],
-        text=cleaned_steps[-days_to_vis:]
+        text=cleaned_steps[-days_to_vis:],
+        marker=dict(
+            color=measures_df['active'][-days_to_vis:],
+            colorscale='Magma',
+            cmid=1800,
+            showscale=True
+        )
     )
 ])
 steps_plot.update_traces(
-    marker_color='#c8abc1',
     marker_line_color='#946E8B',
     marker_line_width=1.5,
     opacity=0.6,
@@ -118,8 +132,8 @@ steps_plot.write_image(
 prop_act_plot = go.Figure(data=[
     go.Bar(
         name='Level of Activity',
-        x=activity_dates[-days_to_vis:],
-        y=active_prop[-days_to_vis:]
+        x=measures_df['date'][-days_to_vis:],
+        y=measures_df['active_prop'][-days_to_vis:]
     )
 ])
 prop_act_plot.update_traces(
@@ -148,12 +162,12 @@ guage_wk =  8 + datetime.today().weekday()
 week_rag_status = go.Figure(data=[
     go.Indicator(
         mode="gauge+number+delta",
-        value=numpy.median(activity[-guage_wk:]),
+        value=numpy.median(measures_df['active'][-guage_wk:]),
         domain={'x': [0, 1], 'y': [0, 1]},
         title={'text': "Week Av Active Seconds", 'font': {'size': 24}},
-        delta={'reference': numpy.median(activity), 'increasing': {'color': '#99f1dd'}},
+        delta={'reference': numpy.median(measures_df['active']), 'increasing': {'color': '#99f1dd'}},
         gauge={
-            'axis': {'range': [None, numpy.percentile(activity, 90)], 'tickcolor': '#6D9476'},
+            'axis': {'range': [None, numpy.percentile(measures_df['active'], 90)], 'tickcolor': '#6D9476'},
             'bar': {'color': '#6D9476'},
             'steps': [
                 {'range': [0, 1800], 'color': '#F199AD'},
@@ -170,12 +184,12 @@ guage_mnth = 30 + datetime.today().weekday()
 month_rag_status = go.Figure(data=[
     go.Indicator(
         mode="gauge+number+delta",
-        value=numpy.median(activity[-guage_mnth:]),
+        value=numpy.median(measures_df['active'][-guage_mnth:]),
         domain={'x': [0, 1], 'y': [0, 1]},
         title={'text': "Month Av Active Seconds", 'font': {'size': 24}},
-        delta={'reference': numpy.median(activity), 'increasing': {'color': '#99f1dd'}},
+        delta={'reference': numpy.median(measures_df['active']), 'increasing': {'color': '#99f1dd'}},
         gauge={
-            'axis': {'range': [None, numpy.percentile(activity, 90)], 'tickcolor': '#6D9476'},
+            'axis': {'range': [None, numpy.percentile(measures_df['active'], 90)], 'tickcolor': '#6D9476'},
             'bar': {'color': '#6D9476'},
             'steps': [
                 {'range': [0, 1800], 'color': '#F199AD'},
@@ -193,6 +207,7 @@ month_rag_status.write_image('/home/anw/mysite/electric-plan/static/month_rag_gu
 # remove saturdays
 weekday_dates = [x[0] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5]
 weekday_act = [x[1] for x in date_stamped if datetime.strptime(x[0], '%Y-%m-%d').weekday() != 5]
+
 # remove outliers from activity so overall trend easier to see
 smooth_act = [x if x in range(0, 12001) else 3000 for x in weekday_act]
 
