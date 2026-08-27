@@ -44,7 +44,7 @@ measures_df['active_prop'] = measures_df['active']/(
 
 # round the figures to improve plotly visuals
 measures_df['active_prop'] = measures_df['active_prop'].mul(100).round()
-measures_df['steps'] = measures_df['steps'].round()
+measures_df['steps'] = measures_df['steps'].astype(int)
 
 # synthesise some more accurate figures to deal with unlikely counts
 cleaned_steps = []
