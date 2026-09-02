@@ -13,9 +13,9 @@ plotly.io.defaults.default_width = 1500
 # Read in the sourcedata
 measures_file = open('/home/anw/mysite/electric-plan/DATA/measure_data.txt')
 measures = json.load(measures_file)
-# Turn measures['body']['activities'] into a daily DataFrame and fill missing dates with zero rows
 
-measures_df = pd.DataFrame(measures["body"]["activities"]).copy()
+# Turn measures['body']['activities'] into a daily DataFrame and fill missing dates with zero rows
+measures_df = pd.DataFrame(measures["body"]["activities"])
 
 measures_df["date"] = pd.to_datetime(measures_df["date"])
 measures_df = measures_df.sort_values("date").drop_duplicates("date", keep="last")
@@ -55,7 +55,9 @@ for s in measures_df['steps']:
     else:
         cleaned_steps.append(s)
 
+# this line is legacy debt and can change to pandas
 date_stamped = list(zip(measures_df['date'], measures_df['active']))
+
 # Generate plots
 
 # recent steps
@@ -98,63 +100,6 @@ steps_plot.update_yaxes(
 steps_plot.write_image(
     '/home/anw/mysite/electric-plan/static/daily_steps.png',
     format='png'
-)
-
-# long term steps
-# removed as not easily readable or insightful
-
-# lt_steps_plot = go.Figure(data=[
-#     go.Scatter(
-#         name='Long Term Steps',
-#         x=activity_dates,
-#         y=cleaned_steps,
-#         mode='lines'
-#     )
-# ])
-# lt_steps_plot.update_traces(
-#     marker_color='#946E8B'
-# )
-# lt_steps_plot.update_layout(
-#     plot_bgcolor='#ffffff',
-#     hovermode='x unified'
-# )
-# lt_steps_plot.update_xaxes(
-#     fixedrange=True
-# )
-# lt_steps_plot.update_yaxes(
-#     fixedrange=True
-# )
-# lt_steps_plot.write_image(
-#     '/home/anw/mysite/electric-plan/static/long_term_steps.png',
-#     format='png'
-# )
-
-# recent proportion of day being active
-prop_act_plot = go.Figure(data=[
-    go.Bar(
-        name='Level of Activity',
-        x=measures_df['date'][-days_to_vis:],
-        y=measures_df['active_prop'][-days_to_vis:]
-    )
-])
-prop_act_plot.update_traces(
-    marker_color='#6D9476'
-)
-prop_act_plot.update_layout(
-    plot_bgcolor='#ffffff',
-    hovermode='x unified'
-)
-prop_act_plot.update_xaxes(
-    fixedrange=True,
-    dtick="D1",
-    tickformat="%A<br>%d %b"
-)
-prop_act_plot.update_yaxes(
-    fixedrange=True,
-    title='Active Minutes'
-)
-prop_act_plot.write_html(
-    '/home/anw/mysite/electric-plan/static/prop_act.html'
 )
 
 # dial guages
@@ -202,6 +147,46 @@ month_rag_status = go.Figure(data=[
     )
 ])
 month_rag_status.write_image('/home/anw/mysite/electric-plan/static/month_rag_guage.png')
+
+# bubble plot for activity and calories
+act_bbl_plot = go.Figure(
+    go.Scatter(
+        x=measures_df["date"][-days_to_vis:],
+        y=measures_df["active"][-days_to_vis:],
+        marker_size=measures_df["active_prop"][-days_to_vis:].fillna(0)*10,
+        mode="markers",
+        marker=dict(
+            # sizemode="area",
+            sizeref=2,
+            sizemin=6,
+            color=measures_df["calories"][-days_to_vis:],
+            colorscale="Magma",
+            showscale=True,
+            colorbar=dict(title="Calories"),
+            line=dict(width=1, color="white"),
+        ),
+        customdata=measures_df[["active_prop", "calories"]][-days_to_vis:],
+        hovertemplate=(
+            "<b>%{x|%d %b %Y}</b><br>"
+            "Active: %{y:,.0f}<br>"
+            "Active proportion: %{customdata[0]:.0f}%<br>"
+            "Calories: %{customdata[1]:,.0f}"
+            "<extra></extra>"
+        ),
+    )
+)
+
+act_bbl_plot.update_layout(
+    # title="Activity and Calories — Last 15 Days",
+    xaxis_title="Date",
+    yaxis_title="Active (seconds)",
+    # template="plotly_white",
+    hovermode="closest",
+    plot_bgcolor="#ffffff",
+)
+act_bbl_plot.update_xaxes(tickformat="%d %b")
+
+act_bbl_plot.write_html('/home/anw/mysite/electric-plan/static/act_bbl_plot.html')
 
 # long term absolute activity levels
 
